@@ -85,11 +85,11 @@ spark-submit ./WriteSampleData.jar
 
 ```
 
-4. Upload the generated 'build/libs/WordCount.jar' file to the bucket;
+2. Upload the generated 'build/libs/WordCount.jar' file to the bucket;
 
-5. Connect to the EMR cluster master node with SSH (click the SSH link in the cluster summary panel and follow the instructions);
+3. Connect to the EMR cluster master node with SSH (click the SSH link in the cluster summary panel and follow the instructions);
 
-6. Download the appliction jar file to the master node:
+4. Download the appliction jar file to the master node:
 
 ```bash
 
@@ -97,7 +97,7 @@ aws s3 cp s3://spark-dynamodb-examples/WordCount.jar .
 
 ```
 
-7. Execute the application:
+5. Execute the application:
  
 ```bash
 
