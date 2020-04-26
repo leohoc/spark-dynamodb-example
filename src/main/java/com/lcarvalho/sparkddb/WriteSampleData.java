@@ -28,15 +28,16 @@ public class WriteSampleData {
         JavaSparkContext sparkContext = buildSparkContext();
         JobConf jobConf = JobConfiguration.build(sparkContext);
 
-        JavaRDD<String> lines = sparkContext.textFile("in/eng_sentences.tsv");
+        JavaRDD<String> lines = sparkContext.textFile("s3n://spark-dynamodb-examples/eng_sentences.tsv");
         JavaRDD<String> formattedLines = lines.map(line -> line.split("\t")[2]);
         LOGGER.info("formattedLines count: " + formattedLines.count());
 
         JavaPairRDD<Text, DynamoDBItemWritable> javaPairRDD = formattedLines.mapToPair(line -> {
+            long days = (new Random()).nextInt(2);
             Map<String, AttributeValue> attributes = new HashMap<>();
             attributes.put("prophetCode", new AttributeValue(UUID.randomUUID().toString()));
-            attributes.put("prophecyTimestamp", new AttributeValue(LocalDateTime.now().toString()));
-            attributes.put("prophecyDate", new AttributeValue(LocalDate.now().toString()));
+            attributes.put("prophecyTimestamp", new AttributeValue(LocalDateTime.now().plusDays(days).toString()));
+            attributes.put("prophecyDate", new AttributeValue(LocalDate.now().plusDays(days).toString()));
             attributes.put("prophecySummary", new AttributeValue(line));
             attributes.put("prophecyDescription", new AttributeValue(line));
 
@@ -51,8 +52,7 @@ public class WriteSampleData {
 
     private static JavaSparkContext buildSparkContext() throws ClassNotFoundException {
         SparkConf conf = new SparkConf()
-                .setAppName("PropheciesGenerator")
-                .setMaster("local[4]")
+                .setAppName("WriteSampleData")
                 .registerKryoClasses(new Class<?>[]{
                         Class.forName("org.apache.hadoop.io.Text"),
                         Class.forName("org.apache.hadoop.dynamodb.DynamoDBItemWritable")

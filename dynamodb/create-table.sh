@@ -1,2 +1,2 @@
 aws dynamodb create-table \
-  --cli-input-json file://dynamodb/prophecyTable.json
+  --cli-input-json file://prophecyTable.json
