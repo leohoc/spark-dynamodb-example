@@ -51,7 +51,7 @@ Instructions:
 
 ```bash
 
-./gradlew clean jar
+./gradlew clean jarWriteSampleData
 
 ```
 
@@ -76,3 +76,31 @@ spark-submit ./WriteSampleData.jar
 ```
 
 #### Spark App #2: Counting the number of occurrences of each word in the prophecies of a single day
+
+1. Generate the application jar file:
+
+```bash
+
+./gradlew clean jarWordCount
+
+```
+
+4. Upload the generated 'build/libs/WordCount.jar' file to the bucket;
+
+5. Connect to the EMR cluster master node with SSH (click the SSH link in the cluster summary panel and follow the instructions);
+
+6. Download the appliction jar file to the master node:
+
+```bash
+
+aws s3 cp s3://spark-dynamodb-examples/WordCount.jar .
+
+```
+
+7. Execute the application:
+ 
+```bash
+
+spark-submit ./WordCount.jar
+
+```
