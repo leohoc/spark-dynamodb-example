@@ -33,11 +33,13 @@ public class WriteSampleData {
         LOGGER.info("formattedLines count: " + formattedLines.count());
 
         JavaPairRDD<Text, DynamoDBItemWritable> javaPairRDD = formattedLines.mapToPair(line -> {
-            long days = (new Random()).nextInt(2);
+//            long days = (new Random()).nextInt(2);
             Map<String, AttributeValue> attributes = new HashMap<>();
             attributes.put("prophetCode", new AttributeValue(UUID.randomUUID().toString()));
-            attributes.put("prophecyTimestamp", new AttributeValue(LocalDateTime.now().plusDays(days).toString()));
-            attributes.put("prophecyDate", new AttributeValue(LocalDate.now().plusDays(days).toString()));
+//            attributes.put("prophecyTimestamp", new AttributeValue(LocalDateTime.now().plusDays(days).toString()));
+//            attributes.put("prophecyDate", new AttributeValue(LocalDate.now().plusDays(days).toString()));
+            attributes.put("prophecyTimestamp", new AttributeValue(LocalDateTime.of(2020,04,30, 0, 0, 0).toString()));
+            attributes.put("prophecyDate", new AttributeValue(LocalDate.of(2020,04,30).toString()));
             attributes.put("prophecySummary", new AttributeValue(line));
             attributes.put("prophecyDescription", new AttributeValue(line));
 

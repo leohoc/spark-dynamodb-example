@@ -10,8 +10,8 @@ public class JobConfiguration {
         DefaultAWSCredentialsProviderChain defaultAWSCredentialsProviderChain = new DefaultAWSCredentialsProviderChain();
         final JobConf jobConf = new JobConf(javaSparkContext.hadoopConfiguration());
         jobConf.set("dynamodb.servicename", "dynamodb");
-        jobConf.set("dynamodb.input.tableName", "Prophecy");
-        jobConf.set("dynamodb.output.tableName", "Prophecy");
+        jobConf.set("dynamodb.input.tableName", "ProphecyWithoutIndex");
+        jobConf.set("dynamodb.output.tableName", "ProphecyWithoutIndex");
 //        jobConf.set("dynamodb.awsAccessKeyId", defaultAWSCredentialsProviderChain.getCredentials().getAWSAccessKeyId());
 //        jobConf.set("dynamodb.awsSecretAccessKey", defaultAWSCredentialsProviderChain.getCredentials().getAWSSecretKey());
         jobConf.set("dynamodb.endpoint", "dynamodb.us-east-1.amazonaws.com");

@@ -30,7 +30,7 @@ public class WordCount {
 
         JavaPairRDD<Text, DynamoDBItemWritable> prophecies = sparkContext.hadoopRDD(jobConf, DynamoDBInputFormat.class, Text.class, DynamoDBItemWritable.class);
 
-        LOGGER.info("prophecies count: " + prophecies.count());
+//        LOGGER.info("prophecies count: " + prophecies.count());
 
         Tuple2<Text, DynamoDBItemWritable> firstProphecy = prophecies.first();
         Map<String, AttributeValue> firstProphecyAttributes = firstProphecy._2.getItem();
@@ -43,7 +43,7 @@ public class WordCount {
         JavaPairRDD<Text, DynamoDBItemWritable> filteredProphecies = prophecies.filter(prophecy -> {
             DynamoDBItemWritable item = prophecy._2();
             Map<String, AttributeValue> attributes = item.getItem();
-            return attributes.get("prophecyDate").getS().equals("2020-04-27");
+            return attributes.get("prophecyDate").getS().equals("2020-04-30");
         });
 
         LOGGER.info("filtered prophecies count: " + filteredProphecies.count());
@@ -59,6 +59,8 @@ public class WordCount {
         LOGGER.info("prophecies summaries word count: " + words.count());
 
         Map<String, Long> wordCounts = words.countByValue();
+
+        LOGGER.info("prophecies summaries distinct word count: " + wordCounts.size());
 
         for (Map.Entry<String, Long> entry : wordCounts.entrySet()) {
             LOGGER.info(entry.getKey() + " : " + entry.getValue());
