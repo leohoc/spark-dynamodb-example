@@ -1,0 +1,24 @@
+{
+  "TableName": "ProphecyByDate",
+  "BillingMode": "PAY_PER_REQUEST",
+  "KeySchema": [
+    {
+      "KeyType": "HASH",
+      "AttributeName": "prophecyDate"
+    },
+    {
+      "KeyType": "RANGE",
+      "AttributeName": "prophetCode"
+    }
+  ],
+  "AttributeDefinitions": [
+    {
+      "AttributeName": "prophetCode",
+      "AttributeType": "S"
+    },
+    {
+      "AttributeName": "prophecyDate",
+      "AttributeType": "S"
+    }
+  ]
+}
