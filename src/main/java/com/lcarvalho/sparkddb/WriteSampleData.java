@@ -8,7 +8,6 @@ import org.apache.hadoop.mapred.JobConf;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -25,7 +24,7 @@ public class WriteSampleData {
     public static void main(String[] args) throws Exception {
 
         String application = "WriteSampleData";
-        String tableName = "ProphecyByDate";
+        String tableName = "Prophecy";
         Logger.getLogger("org").setLevel(Level.ERROR);
         JavaSparkContext sparkContext = JobConfiguration.buildSparkContext(application, tableName);
         JobConf jobConf = JobConfiguration.build(sparkContext, tableName);
