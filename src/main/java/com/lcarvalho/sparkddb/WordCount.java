@@ -26,7 +26,7 @@ public class WordCount {
         String application = "WordCount";
         String tableName = "Prophecy";
         Logger.getLogger("org").setLevel(Level.ERROR);
-        JavaSparkContext sparkContext = JobConfiguration.buildLocalSparkContext(application, tableName);
+        JavaSparkContext sparkContext = JobConfiguration.buildSparkContext(application, tableName);
         JobConf jobConf = JobConfiguration.build(sparkContext, tableName);
 
         JavaPairRDD<Text, DynamoDBItemWritable> prophecies = sparkContext.hadoopRDD(jobConf, DynamoDBInputFormat.class, Text.class, DynamoDBItemWritable.class);

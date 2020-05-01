@@ -29,26 +29,24 @@ public class WriteSampleData {
         JavaSparkContext sparkContext = JobConfiguration.buildSparkContext(application, tableName);
         JobConf jobConf = JobConfiguration.build(sparkContext, tableName);
 
-        JavaRDD<String> lines = sparkContext.textFile("s3n://spark-dynamodb-examples/eng_sentences.tsv");
-        JavaRDD<String> formattedLines = lines.map(line -> line.split("\t")[2]);
-        LOGGER.info("formattedLines count: " + formattedLines.count());
+        JavaRDD<String> sentences = sparkContext.textFile("s3n://spark-dynamodb-examples/eng_sentences.tsv");
+        JavaRDD<String> formattedSentences = sentences.map(sentence -> sentence.split("\t")[2]);
+        LOGGER.info("formattedSentences count: " + formattedSentences.count());
 
-        JavaPairRDD<Text, DynamoDBItemWritable> javaPairRDD = formattedLines.mapToPair(line -> {
+        JavaPairRDD<Text, DynamoDBItemWritable> prophecies = formattedSentences.mapToPair(sentence -> {
             Map<String, AttributeValue> attributes = new HashMap<>();
             attributes.put("prophetCode", new AttributeValue(UUID.randomUUID().toString()));
             attributes.put("prophecyTimestamp", new AttributeValue(LocalDateTime.of(2020,05,02, 0, 0, 0).toString()));
             attributes.put("prophecyDate", new AttributeValue(LocalDate.of(2020,05,02).toString()));
-            attributes.put("prophecySummary", new AttributeValue(line));
-            attributes.put("prophecyDescription", new AttributeValue(line));
+            attributes.put("prophecySummary", new AttributeValue(sentence));
+            attributes.put("prophecyDescription", new AttributeValue(sentence));
 
             DynamoDBItemWritable dynamoDBItemWritable = new DynamoDBItemWritable();
             dynamoDBItemWritable.setItem(attributes);
             return new Tuple2<>(new Text(""), dynamoDBItemWritable);
         });
 
-        javaPairRDD.saveAsHadoopDataset(jobConf);
+        prophecies.saveAsHadoopDataset(jobConf);
         sparkContext.stop();
     }
-
-
 }

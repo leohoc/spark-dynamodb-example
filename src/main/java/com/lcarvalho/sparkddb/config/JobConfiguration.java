@@ -44,12 +44,6 @@ public class JobConfiguration {
         return new JavaSparkContext(conf);
     }
 
-    public static JavaSparkContext buildSparkAudienceContext(String application, String tableName) throws ClassNotFoundException {
-        SparkConf conf = new SparkConf()
-                .setAppName(application + "-" + tableName);
-        return new JavaSparkContext(conf);
-    }
-
     public static JavaSparkContext buildLocalSparkContext(String application, String tableName) throws ClassNotFoundException {
         SparkConf conf = new SparkConf()
                 .setMaster("local[4]")

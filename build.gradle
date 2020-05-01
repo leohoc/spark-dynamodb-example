@@ -14,8 +14,8 @@ dependencies {
 
     compile group: 'com.amazon.emr', name: 'emr-dynamodb-hadoop', version: '4.2.0'
 
-    provided group: 'org.apache.spark', name: 'spark-core_2.12', version: '2.4.5'
-    provided group: 'org.apache.spark', name: 'spark-sql_2.12', version: '2.4.5'
+    compile group: 'org.apache.spark', name: 'spark-core_2.12', version: '2.4.5'
+    compile group: 'org.apache.spark', name: 'spark-sql_2.12', version: '2.4.5'
 }
 
 jar {
