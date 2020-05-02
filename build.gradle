@@ -3,46 +3,47 @@ plugins {
 }
 
 group 'com.lcarvalho.sparkddb'
-version '1.0-SNAPSHOT'
+version '1.0'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-
     compile group: 'com.amazon.emr', name: 'emr-dynamodb-hadoop', version: '4.2.0'
 
     compile group: 'org.apache.spark', name: 'spark-core_2.12', version: '2.4.5'
     compile group: 'org.apache.spark', name: 'spark-sql_2.12', version: '2.4.5'
 }
 
-jar {
+task fatJarPopulateCitations(type: Jar) {
     zip64 true
-    archiveName = "WriteSampleData.jar"
+    manifest {
+        attributes 'Main-Class': 'com.lcarvalho.sparkddb.PopulateCovid19Citations'
+        attributes 'Implementation-Title': 'Spark Job', 'Implementation-Version': version
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+    }
+    baseName = 'PopulateCovid19Citations'
     from {
         configurations.compile.collect {
             it.isDirectory() ? it : zipTree(it)
         }
     }
-    manifest {
-        attributes 'Main-Class': 'com.lcarvalho.sparkddb.WriteSampleData'
-    }
-
-    exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
-}
-
-task jarWriteSampleData (type: Jar) {
-    description "Generates WriteSampleData JAR"
-    archiveName = "WriteSampleData.jar"
-    manifest {attributes 'Main-Class': 'com.lcarvalho.sparkddb.WriteSampleData'}
     with jar
 }
 
-task jarWordCount (type: Jar) {
-    description "Generates WordCount JAR"
-    archiveName = "WordCount.jar"
-    manifest {attributes 'Main-Class': 'com.lcarvalho.sparkddb.WordCount'}
+task fatJarCitationsWordCount(type: Jar) {
+    zip64 true
+    manifest {
+        attributes 'Main-Class': 'com.lcarvalho.sparkddb.Covid19CitationsWordCount'
+        attributes 'Implementation-Title': 'Spark Job', 'Implementation-Version': version
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF','META-INF/*.DSA'
+    }
+    baseName = 'Covid19CitationsWordCount'
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
     with jar
 }

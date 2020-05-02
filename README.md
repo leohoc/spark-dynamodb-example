@@ -12,95 +12,62 @@ Use cases examples of Apache Spark applications ready to run on AWS EMR using da
 - awscli >= 2 with AWS account credentials configured;
 - An installed JDK 8;
 
-#### Creating DynamoDB resources
+#### Providing the infrastructure
 
-This command will create a DynamoDB table named 'Prophecy' with a UUID hash key named 'prophetCode', and a Secondary Global Index (SGI) with 'prophecyDate' as the hash key:   
+Follow the instructions of the [spark-dynamodb-infrastructure](https://github.com/leohoc/spark-dynamodb-infrastructure) project.
 
-```bash
+#### Generating the Application Files
 
-./dynamodb/create-table.sh
+##### Spark App #1: Populating the Covid19Citation table
 
-```
-
-#### Creating an EMR cluster
-
-Using the AWS console, create a EMR cluster with the following configurations:
-
-* Cluster execution mode;
-* Software configuration version: emr-5.*;
-* Applications: Spark;
-* Create a EC2 keypair and choose it in the security and access session;
-* Add a policy with read/write access to any DynamoDB table and index to the EC2 instance profile Role;
-
-When cluster initializing is complete, add permission to SSH connection:
-
-* Go to the main security group configuration;
-* Edit the inbound rules of the master security group;
-* Add a rule with 'SSH' type and 'Anywhere' source;
-
-#### Spark App #1: Generating Sample Data
-
-The WriteSampleData application will create more than 1.3 million prophecies in the 'Prophecy' table, evenly spread between two prophecy dates.
+The PopulateCovid19Citations application will store the WHO database of studies with COVID-19 citations in a DynamoDB table.
 Instructions:
 
-1. Create a S3 bucket named 'spark-dynamodb-examples';
+1. Upload the 'in/WHOCovid19CitationsDatabase.csv' file to the 'spark-dynamodb-example' S3 bucket;
 
-2. Upload the 'in/eng_sentences.tsv' file to the bucket;
-
-3. Generate the application jar file:
+2. Generate the application jar file:
 
 ```bash
 
-./gradlew clean jarWriteSampleData
+./gradlew clean fatJarPopulateCitations
 
 ```
 
-4. Upload the generated 'build/libs/WriteSampleData.jar' file to the bucket;
+3. the application file will be generated in build/libs/PopulateCovid19Citations-1.0.jar.
 
-5. Connect to the EMR cluster master node with SSH (click the SSH link in the cluster summary panel and follow the instructions);
+##### Spark App #2: Counting the words in the COVID-19 citations titles 
 
-6. Download the appliction jar file to the master node:
-
-```bash
-
-aws s3 cp s3://spark-dynamodb-examples/WriteSampleData.jar .
-
-```
-
-7. Execute the application:
- 
-```bash
-
-spark-submit ./WriteSampleData.jar
-
-```
-
-#### Spark App #2: Counting the number of occurrences of each word in the prophecies of a single day
+The Covid19CitationsWordCount application will count the number of times each word was used in the COVID-19 citations titles and store the result in a DynamoDB table.
+Instructions:
 
 1. Generate the application jar file:
 
 ```bash
 
-./gradlew clean jarWordCount
+./gradlew clean fatJarCitationsWordCount
 
 ```
 
-2. Upload the generated 'build/libs/WordCount.jar' file to the bucket;
+2. the application file will be generated in build/libs/Covid19CitationsWordCount-1.0.jar.
 
-3. Connect to the EMR cluster master node with SSH (click the SSH link in the cluster summary panel and follow the instructions);
+#### Running in the AWS EMR cluster
 
-4. Download the appliction jar file to the master node:
+1. Upload the generated application file to the 'spark-dynamodb-example' bucket;
+
+2. Connect to the EMR cluster master node with SSH (click the SSH link in the cluster summary panel and follow the instructions);
+
+3. Download the application jar file to the master node:
 
 ```bash
 
-aws s3 cp s3://spark-dynamodb-examples/WordCount.jar .
+aws s3 cp s3://spark-dynamodb-example/<app_name>.jar .
 
 ```
 
-5. Execute the application:
+4. Execute the application:
  
 ```bash
 
-spark-submit ./WordCount.jar
+spark-submit ./<app_name>.jar
 
 ```
