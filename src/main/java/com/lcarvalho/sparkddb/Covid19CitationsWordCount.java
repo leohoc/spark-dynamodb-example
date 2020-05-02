@@ -55,5 +55,9 @@ public class Covid19CitationsWordCount {
         // Counting the number of times each word was used
         Map<String, Long> wordCounts = citationsTitlesWords.countByValue();
         LOGGER.info("Citations titles distinct word count: " + wordCounts.size());
+
+        for (String word : wordCounts.keySet()) {
+            LOGGER.info("Word: " + word + " - Count: " + wordCounts.get(word));
+        }
     }
 }

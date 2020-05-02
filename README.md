@@ -37,7 +37,7 @@ Instructions:
 
 ##### Spark App #2: Counting the words in the COVID-19 citations titles 
 
-The Covid19CitationsWordCount application will count the number of times each word was used in the COVID-19 citations titles and store the result in a DynamoDB table.
+The Covid19CitationsWordCount application will count the number of times each word was used in the COVID-19 citations titles and print the result in the console.
 Instructions:
 
 1. Generate the application jar file:
