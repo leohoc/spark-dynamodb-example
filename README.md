@@ -68,6 +68,6 @@ aws s3 cp s3://spark-dynamodb-example/<app_name>.jar .
  
 ```bash
 
-spark-submit ./<app_name>.jar
+spark-submit <app_name>.jar
 
 ```
